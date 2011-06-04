@@ -1,6 +1,6 @@
 /*
-    jquery.naaav.0.5.js
-    # Homebrand Dropdown Menu Plugin
+    # jQuery naaav
+	A Homebrand Dropdown Menu Plugin
 
     Just _another_ jQuery drop-down menu plugin :)
 
@@ -11,12 +11,14 @@
     You can pass in your own show/hide functions to completely customise the
     sub-menu display behaviour.
 
-    Created by Victor Nguyen (vic.nguyen@gmail.com) on 2011-01-12.
+    Created by Victor Nguyen
+	vic.nguyen@gmail.com
+	@victornguyen
 */
 
 (function($){
-
-    $.fn.nav = function(options) {
+	
+    $.fn.naaav = function(options) {
         // return if no element or no <ul> child elements
         var $nav = this;
     	if (!$nav.length || !$nav.find('ul').length) return;
@@ -32,10 +34,10 @@
             activeClass:    'active',
             animation:      'slide',    // 'slide' or 'fade'
             easing:         'swing',
-            show:           250,
-            hide:           150,
+            show:           125,
+            hide:           100,
             delayIn:        0,
-            delayOut:       125,
+            delayOut:       150,
             showFunc:       null,       // specify your own show/hide
             hideFunc:       null        // submenu functions...
     	};
