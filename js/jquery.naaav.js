@@ -12,7 +12,6 @@
     sub-menu display behaviour.
 
     Created by Victor Nguyen
-	vic.nguyen@gmail.com
 	@victornguyen
 */
 
