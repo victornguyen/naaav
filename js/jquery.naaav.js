@@ -23,24 +23,13 @@
     	if (!$nav.length || !$nav.find('ul').length) return;
 
     	// return if 'nav' has already been invoked on this element
-    	if ($nav.data('nav')) return;
+    	if ($nav.data('naaav')) return;
 
         // tag element with data to indicate 'nav' has been invoked
-    	$nav.data('nav', true);
-
-        // set options
-    	var defaults = {
-            activeClass:    'active',
-            animation:      'slide',    // 'slide' or 'fade'
-            easing:         'swing',
-            show:           125,
-            hide:           100,
-            delayIn:        0,
-            delayOut:       150,
-            showFunc:       null,       // specify your own show/hide
-            hideFunc:       null        // submenu functions...
-    	};
-        var o = $.extend(defaults, options);
+    	$nav.data('naaav', true);
+		
+        var o = $.extend($.fn.naaav.defaults, options);
+		
         // make sure easing function exists...
 		if (!$.isFunction($.easing[o.easing])) o.easing = "swing";
 
@@ -114,5 +103,17 @@
         // return element to chain
     	return this;
     };
+
+	$.fn.naaav.defaults = {
+        activeClass:    'active',
+        animation:      'slide',    // 'slide' or 'fade'
+        easing:         'swing',
+        show:           125,
+        hide:           100,
+        delayIn:        0,
+        delayOut:       150,
+        showFunc:       null,       // specify your own show/hide
+        hideFunc:       null        // submenu functions...
+	};
 
 }(jQuery));
