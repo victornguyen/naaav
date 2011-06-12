@@ -28,8 +28,8 @@
 
          var o = $.extend({}, $.fn.naaav.defaults, options);
 
-         // make sure easing function exists...
-         if (!$.isFunction($.easing[o.easing])) o.easing = "swing";
+         var hasEasingFunc = ($.isFunction($.easing[o.easing]));
+         if (!hasEasingFunc) o.easing = "swing";
 
          // set vars
          var animateMethod;
