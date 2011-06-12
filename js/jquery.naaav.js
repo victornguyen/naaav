@@ -101,22 +101,16 @@
         
     };
     
-    // util methods
-    function __getType(object) {
-        return Object.prototype.toString.call(object).match(/^\[object\s(.*)\]$/)[1];
-    }
-    
     $.fn.naaav = function(options) {
         // return if no elements found
         if (!this.length) return this;
 
         var args = (arguments[1]) ? Array.prototype.slice.call(arguments,1) : null,
-            inst,
-            optType = __getType(options);
+            inst;
 
         this.each(function(){
             var $elem = $(this);
-            if (optType == 'String') {
+            if (typeof options === 'string') {
                 inst = $elem.data('naaav');
                 if (inst[options])
                     return inst[options].apply(inst,args);
