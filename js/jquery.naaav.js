@@ -18,98 +18,107 @@
 (function($,window){
     
     var Naaav = function($el, options) {
-         if (!$el.length || !$el.find('ul').length) return;
+        this.$el = $el;
+        this.options = options;
+        this._init();
+    };
+    
+    Naaav.prototype = {
+        
+        _init: function() {
+            // return if 'nav' has already been invoked on this element
+            if (this.$el.data('naaav')) return;
+            
+            this.config = $.extend({}, $.fn.naaav.defaults, this.options);
+            
+            // check if easing func is available and fallback
+            var hasEasingFunc = ($.isFunction($.easing[this.config.easing]));
+            if (!hasEasingFunc) this.config.easing = "swing";
+            
+            // set animation method
+            this.animateMethod;
+            switch (this.config.animation) {
+                case 'fade':
+                    this.animateMethod = {
+                        show: 'fadeIn',
+                        hide: 'fadeOut'
+                    };
+                    break;
+                case 'slide':
+                    this.animateMethod = {
+                        show: 'slideDown',
+                        hide: 'slideUp'
+                    };
+                    break;
+                default:
+                    this.animateMethod = {
+                        show: 'fadeIn',
+                        hide: 'fadeOut'
+                    };
+            }
+            
+            // bind event handlers
+            this.$el.children('li')
+                .bind('mouseenter', this, this.showFunc || this._show)
+                .bind('mouseleave', this, this.hideFunc || this._hide);
+        },
+        
+        _animate: function($item, type) {
+            $item.children('ul:first')
+                .stop(false, true)
+                [this.animateMethod[type]](this.config[type], this.config.easing, function(){ $(this)[type](); });
+        },
+        
+        _show: function(e) {
+            var $item = $(this),
+                naaav = e.data,
+                _animate = $.proxy(naaav._animate, naaav);
+                
+            naaav.hideAll($item);
+            $item.children('a').addClass(naaav.config.activeClass);
+            window.clearTimeout($item.data('timeoutId'));
+            window.setTimeout(function(){
+                _animate($item, 'show');
+            }, naaav.config.delayIn);
+        },
+        
+        _hide: function(e) {
+            var $item = $(this),
+                naaav = e.data,
+                _animate = $.proxy(naaav._animate, naaav);
+                
+            $item.children('a').removeClass(naaav.config.activeClass);
+            var timeoutId = window.setTimeout(function(){
+                    _animate($item, 'hide');
+                }, naaav.config.delayOut);
+            // store this timeout id against the item to clear in _show() later...
+            // this prevents multiple hide animations from queing up
+            $item.data('timeoutId', timeoutId);
+        },
 
-         // return if 'nav' has already been invoked on this element
-         if ($el.data('naaav')) return;
-
-         // tag element with data to indicate 'nav' has been invoked
-         $el.data('naaav', true);
-
-         var o = $.extend({}, $.fn.naaav.defaults, options);
-
-         var hasEasingFunc = ($.isFunction($.easing[o.easing]));
-         if (!hasEasingFunc) o.easing = "swing";
-
-         // set vars
-         var animateMethod;
-         switch (o.animation) {
-             case 'fade':
-                 animateMethod = {
-                     show: 'fadeIn',
-                     hide: 'fadeOut'
-                 };
-                 break;
-             case 'slide':
-                 animateMethod = {
-                     show: 'slideDown',
-                     hide: 'slideUp'
-                 };
-                 break;
-             default:
-                 animateMethod = {
-                     show: 'fadeIn',
-                     hide: 'fadeOut'
-                 };
-         }
-
-         // funcs
-         function _animateSubNav($item, type) {
-             $item.children('ul:first')
-                 .stop(false, true)
-                 [animateMethod[type]](o[type], o.easing, function(){ $(this)[type](); });
-         }
-         
-         
-         function _hideAll($item) {
-             $item
-                 .siblings('li')
-                     .children('a')
-                         .removeClass(o.activeClass)
-                         .end()
-                     .children('ul')
-                         .stop(false, true)
-                         .hide();
-         }
-
-         // handlers     
-         this.show = function(e) {
-             var $item = $(this);
-             _hideAll($item);
-             $item.children('a').addClass(o.activeClass);
-             window.clearTimeout($item.data('timeoutId'));
-             window.setTimeout(function(){
-                 _animateSubNav($item, 'show');
-             }, o.delayIn);
-         };
-
-         this.hide = function(e) {
-             var $item = $(this);
-             $item.children('a').removeClass(o.activeClass);
-             var timeoutId = window.setTimeout(function(){
-                     _animateSubNav($item, 'hide');
-                 }, o.delayOut);
-             // store this timeout id against the item to clear in _show() later...
-             // this prevents multiple hide animations from queing up
-             $item.data('timeoutId', timeoutId);
-         };
-
-         // bind event handlers
-         $el.children('li')
-             .bind('mouseenter', o, o.showFunc || this.show)
-             .bind('mouseleave', o, o.hideFunc || this.hide);
+        hideAll: function($item) {
+            $item
+                .siblings('li')
+                    .children('a')
+                        .removeClass(this.config.activeClass)
+                        .end()
+                    .children('ul')
+                        .stop(false, true)
+                        .hide();
+        }
         
     };
     
     $.fn.naaav = function(options) {
         // return if no elements found
         if (!this.length) return this;
-
+        
         var args = (arguments[1]) ? Array.prototype.slice.call(arguments,1) : null,
             inst;
 
         this.each(function(){
             var $elem = $(this);
+            if (!$elem.find('ul').length) return;
             if (typeof options === 'string') {
                 inst = $elem.data('naaav');
                 if (inst[options])
