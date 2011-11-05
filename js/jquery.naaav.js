@@ -15,12 +15,12 @@
     @victornguyen
 */
 
-(function($,window){
+(function($,window,undefined){
     
     var Naaav = function($el, options) {
-        this.$el = $el;
+        this.$el     = $el;
         this.options = options;
-        this.config = $.extend({}, $.fn.naaav.defaults, this.options);
+        this.config  = $.extend({}, $.fn.naaav.defaults, this.options);
         this._init();
     };
     
@@ -85,10 +85,12 @@
             window.clearTimeout($item.data('timeoutId'));
             $item.data(
                 'timeoutId',
-                window.setTimeout(function(){
+                window.setTimeout(
+                    function(){
                         self._animate($item, 'show');
                     },
-                    this.config.delayIn)
+                    this.config.delayIn
+                )
             );
         },
         
@@ -96,11 +98,17 @@
             var self = this;
             $item.children('a').removeClass(this.config.activeClass);
             window.clearTimeout($item.data('timeoutId'));
-            // store this timeout id against the item to clear in _show() later...
-            // this prevents multiple hide animations from queing up
-            $item.data('timeoutId', window.setTimeout(function(){
-                    self._animate($item, 'hide');
-                }, this.config.delayOut));
+            // storing timeout id against the item to clear in _show() later...
+            // prevents multiple delayed animations from queing up
+            $item.data(
+                'timeoutId',
+                window.setTimeout(
+                    function(){
+                        self._animate($item, 'hide');
+                    },
+                    this.config.delayOut
+                )
+            );
         },
 
         hideAll: function($item) {
