@@ -58,15 +58,14 @@
             // bind event handlers
             this.$el.children('li').bind({
                 'mouseenter': function(e){
-                    var $item = $(this);
-                    self._show.apply(self, [$item]);
+                    var fn = $.isFunction(self.config.showFunc) ? self.config.showFunc: self._show;
+                    fn.apply(self, [ $(this) ]);
                 },
                 'mouseleave': function(e){
-                    var $item = $(this);
-                    self._hide.apply(self, [$item]);
+                    var fn = $.isFunction(self.config.hideFunc) ? self.config.hideFunc: self._hide;
+                    fn.apply(self, [ $(this) ]);
                 }
-            })
-                
+            });      
         },
         
         _animate: function($item, type) {
