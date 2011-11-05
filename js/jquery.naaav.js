@@ -26,6 +26,8 @@
     Naaav.prototype = {
         
         _init: function() {
+            var self = this;
+
             // return if 'nav' has already been invoked on this element
             if (this.$el.data('naaav')) return;
             
@@ -58,9 +60,17 @@
             }
             
             // bind event handlers
-            this.$el.children('li')
-                .bind('mouseenter', this, this.showFunc || this._show)
-                .bind('mouseleave', this, this.hideFunc || this._hide);
+            this.$el.children('li').bind({
+                'mouseenter': function(e){
+                    var $item = $(this);
+                    self._show.apply(self, [$item]);
+                },
+                'mouseleave': function(e){
+                    var $item = $(this);
+                    self._hide.apply(self, [$item]);
+                }
+            })
+                
         },
         
         _animate: function($item, type) {
@@ -69,28 +79,22 @@
                 [this.animateMethod[type]](this.config[type], this.config.easing, function(){ $(this)[type](); });
         },
         
-        _show: function(e) {
-            var $item = $(this),
-                naaav = e.data,
-                _animate = $.proxy(naaav._animate, naaav);
-                
-            naaav.hideAll($item);
-            $item.children('a').addClass(naaav.config.activeClass);
+        _show: function($item) {
+            var self = this;
+            this.hideAll($item);
+            $item.children('a').addClass(this.config.activeClass);
             window.clearTimeout($item.data('timeoutId'));
             window.setTimeout(function(){
-                _animate($item, 'show');
-            }, naaav.config.delayIn);
+                self._animate($item, 'show');
+            }, this.config.delayIn);
         },
         
-        _hide: function(e) {
-            var $item = $(this),
-                naaav = e.data,
-                _animate = $.proxy(naaav._animate, naaav);
-                
-            $item.children('a').removeClass(naaav.config.activeClass);
+        _hide: function($item) {
+            var self = this;
+            $item.children('a').removeClass(this.config.activeClass);
             var timeoutId = window.setTimeout(function(){
-                    _animate($item, 'hide');
-                }, naaav.config.delayOut);
+                    self._animate($item, 'hide');
+                }, this.config.delayOut);
             // store this timeout id against the item to clear in _show() later...
             // this prevents multiple hide animations from queing up
             $item.data('timeoutId', timeoutId);
@@ -139,9 +143,9 @@
     
     $.fn.naaav.defaults = {
         activeClass:    'active',
-        animation:      'slide',    // 'slide' or 'fade'
+        animation:      'fade',    // 'slide' or 'fade'
         easing:         'swing',
-        show:           125,
+        show:           100,
         hide:           100,
         delayIn:        0,
         delayOut:       150,
