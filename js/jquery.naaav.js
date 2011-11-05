@@ -20,18 +20,17 @@
     var Naaav = function($el, options) {
         this.$el = $el;
         this.options = options;
+        this.config = $.extend({}, $.fn.naaav.defaults, this.options);
         this._init();
     };
     
     Naaav.prototype = {
-        
+
         _init: function() {
             var self = this;
 
             // return if 'nav' has already been invoked on this element
             if (this.$el.data('naaav')) return;
-            
-            this.config = $.extend({}, $.fn.naaav.defaults, this.options);
             
             // check if easing func is available and fallback
             var hasEasingFunc = ($.isFunction($.easing[this.config.easing]));
@@ -84,20 +83,24 @@
             this.hideAll($item);
             $item.children('a').addClass(this.config.activeClass);
             window.clearTimeout($item.data('timeoutId'));
-            window.setTimeout(function(){
-                self._animate($item, 'show');
-            }, this.config.delayIn);
+            $item.data(
+                'timeoutId',
+                window.setTimeout(function(){
+                        self._animate($item, 'show');
+                    },
+                    this.config.delayIn)
+            );
         },
         
         _hide: function($item) {
             var self = this;
             $item.children('a').removeClass(this.config.activeClass);
-            var timeoutId = window.setTimeout(function(){
-                    self._animate($item, 'hide');
-                }, this.config.delayOut);
+            window.clearTimeout($item.data('timeoutId'));
             // store this timeout id against the item to clear in _show() later...
             // this prevents multiple hide animations from queing up
-            $item.data('timeoutId', timeoutId);
+            $item.data('timeoutId', window.setTimeout(function(){
+                    self._animate($item, 'hide');
+                }, this.config.delayOut));
         },
 
         hideAll: function($item) {
@@ -147,8 +150,8 @@
         easing:         'swing',
         show:           100,
         hide:           100,
-        delayIn:        0,
-        delayOut:       150,
+        delayIn:        100,
+        delayOut:       200,
         showFunc:       null,       // specify your own show/hide
         hideFunc:       null        // submenu functions...
     };
