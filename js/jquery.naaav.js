@@ -29,6 +29,9 @@
         _init: function() {
             var self = this;
             
+            // store references to key elements
+            this._setElems();
+
             // check if easing func is available and fallback
             var hasEasingFunc = ($.isFunction($.easing[this.config.easing]));
             if (!hasEasingFunc) this.config.easing = "swing";
@@ -56,7 +59,7 @@
             }
             
             // bind event handlers
-            this.$el.children('li').bind({
+            this.$items.bind({
                 'mouseenter': function(e){
                     var $item   = $(this),
                         $subnav = self._getSubNav($item),
@@ -121,15 +124,15 @@
             return $link.children('ul').first();
         },
 
+        _setElems: function() {
+            this.$items   = this.$el.children('li');
+            this.$links   = this.$items.children('a');
+            this.$subnavs = this.$items.children('ul');
+        },
+
         hideAll: function($item) {
-            $item
-                .siblings('li')
-                    .children('a')
-                        .removeClass(this.config.activeClass)
-                        .end()
-                    .children('ul')
-                        .stop(false, true)
-                        .hide();
+            this.$links.removeClass(this.config.activeClass);
+            this.$subnavs.stop(false, true).hide();
         }
         
     };
