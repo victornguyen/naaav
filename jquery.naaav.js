@@ -19,8 +19,7 @@
     
     var Naaav = function($el, options) {
         this.$el     = $el;
-        this.options = options;
-        this.config  = $.extend({}, $.fn.naaav.defaults, this.options);
+        this.config  = $.extend({}, $.fn.naaav.defaults, options || {});
         this._init();
     };
 
