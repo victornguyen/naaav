@@ -23,14 +23,11 @@
         this.config  = $.extend({}, $.fn.naaav.defaults, this.options);
         this._init();
     };
-    
+
     Naaav.prototype = {
 
         _init: function() {
             var self = this;
-
-            // return if 'nav' has already been invoked on this element
-            if (this.$el.data('naaav')) return;
             
             // check if easing func is available and fallback
             var hasEasingFunc = ($.isFunction($.easing[this.config.easing]));
