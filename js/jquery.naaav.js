@@ -58,23 +58,33 @@
             // bind event handlers
             this.$el.children('li').bind({
                 'mouseenter': function(e){
-                    var fn = $.isFunction(self.config.showFunc) ? self.config.showFunc: self._show;
-                    fn.apply(self, [ $(this) ]);
+                    var $item   = $(this),
+                        $subnav = self._getSubNav($item),
+                        fn      = $.isFunction(self.config.showFunc) ? self.config.showFunc : self._show;
+                    fn.apply(self, [ $item, $subnav ]);
                 },
                 'mouseleave': function(e){
-                    var fn = $.isFunction(self.config.hideFunc) ? self.config.hideFunc: self._hide;
-                    fn.apply(self, [ $(this) ]);
+                    var $item   = $(this),
+                        $subnav = self._getSubNav($item),
+                        fn      = $.isFunction(self.config.hideFunc) ? self.config.hideFunc : self._hide;
+                    fn.apply(self, [ $item, $subnav ]);
                 }
             });      
         },
         
-        _animate: function($item, type) {
-            $item.children('ul:first')
+        _animate: function($subnav, type) {
+            $subnav
                 .stop(false, true)
-                [this.animateMethod[type]](this.config[type], this.config.easing, function(){ $(this)[type](); });
+                [this.animateMethod[type]](
+                    this.config[type],
+                    this.config.easing,
+                    function(){
+                        $(this)[type]();
+                    }
+                );
         },
         
-        _show: function($item) {
+        _show: function($item, $subnav) {
             var self = this;
             this.hideAll($item);
             $item.children('a').addClass(this.config.activeClass);
@@ -83,14 +93,14 @@
                 'timeoutId',
                 window.setTimeout(
                     function(){
-                        self._animate($item, 'show');
+                        self._animate($subnav, 'show');
                     },
                     this.config.delayIn
                 )
             );
         },
         
-        _hide: function($item) {
+        _hide: function($item, $subnav) {
             var self = this;
             $item.children('a').removeClass(this.config.activeClass);
             window.clearTimeout($item.data('timeoutId'));
@@ -100,11 +110,15 @@
                 'timeoutId',
                 window.setTimeout(
                     function(){
-                        self._animate($item, 'hide');
+                        self._animate($subnav, 'hide');
                     },
                     this.config.delayOut
                 )
             );
+        },
+
+        _getSubNav: function($link) {
+            return $link.children('ul').first();
         },
 
         hideAll: function($item) {
