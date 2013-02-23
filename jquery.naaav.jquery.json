@@ -1,0 +1,27 @@
+{
+  "name": "jquery.naaav",
+  "title": "jQuery naaav",
+  "description": "A simple, bare-bones jQuery drop-down menu navigation plugin.",
+  "version": "0.2.0",
+  "homepage": "https://github.com/victornguyen/naaav",
+  "author": {
+    "name": "Victor Nguyen",
+    "email": "vic.nguyen@gmail.com",
+    "url": "http://www.twitter.com/victornguyen"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victornguyen/naaav.git"
+  },
+  "bugs": "https://github.com/victornguyen/naaav/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/victornguyen/naaav/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": []
+}
