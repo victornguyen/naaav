@@ -1,62 +1,65 @@
 (function($) {
-  /*
-    ======== A Handy Little QUnit Reference ========
-    http://api.qunitjs.com/
+    /*
+        ======== A Handy Little QUnit Reference ========
+        http://api.qunitjs.com/
 
-    Test methods:
-      module(name, {[setup][ ,teardown]})
-      test(name, callback)
-      expect(numberOfAssertions)
-      stop(increment)
-      start(decrement)
-    Test assertions:
-      ok(value, [message])
-      equal(actual, expected, [message])
-      notEqual(actual, expected, [message])
-      deepEqual(actual, expected, [message])
-      notDeepEqual(actual, expected, [message])
-      strictEqual(actual, expected, [message])
-      notStrictEqual(actual, expected, [message])
-      throws(block, [expected], [message])
-  */
+        Test methods:
+        module(name, {[setup][ ,teardown]})
+        test(name, callback)
+        expect(numberOfAssertions)
+        stop(increment)
+        start(decrement)
+        Test assertions:
+        ok(value, [message])
+        equal(actual, expected, [message])
+        notEqual(actual, expected, [message])
+        deepEqual(actual, expected, [message])
+        notDeepEqual(actual, expected, [message])
+        strictEqual(actual, expected, [message])
+        notStrictEqual(actual, expected, [message])
+        throws(block, [expected], [message])
+    */
 
-  module('jQuery#awesome', {
-    // This will run before each test in this module.
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
-  });
+    module('jQuery plugin operation', {
+        setup: function() {
+            this.elems  = $('#qunit-fixture').children();
+            this.$nav   = this.elems.find('#nav');
+        }
+    });
 
-  test('is chainable', function() {
-    expect(1);
-    // Not a bad test to run on collection methods.
-    strictEqual(this.elems.awesome(), this.elems, 'should be chainable');
-  });
+        test('is available on the jQuery object', 1, function() {
+            ok( $.isFunction( $.fn.naaav ), 'is on $.fn' );
+        });
 
-  test('is awesome', function() {
-    expect(1);
-    strictEqual(this.elems.awesome().text(), 'awesome0awesome1awesome2', 'should be awesome');
-  });
+        test('instance API is avaiable', 3, function() {
+            this.$nav.naaav();
+            var api = this.$nav.data('naaav');
+            ok( api, 'successfully accessed the API via the element\'s data' );
+            ok( $.isFunction(api.hideAll), 'hideAll() method is available' );
+            throws(
+                function(){
+                    api.methodThatDoesntExist();
+                },
+                /methodThatDoesntExist/,
+                'throws an error when a non-existant method is called'
+            );
+        });
 
-  module('jQuery.awesome');
+        test('is chainable', 1, function() {
+            strictEqual( this.$nav.naaav(), this.$nav, 'should be chainable' );
+        });
 
-  test('is awesome', function() {
-    expect(2);
-    strictEqual($.awesome(), 'awesome.', 'should be awesome');
-    strictEqual($.awesome({punctuation: '!'}), 'awesome!', 'should be thoroughly awesome');
-  });
+        test('has default values', 2, function() {
+            strictEqual( typeof $.fn.naaav.defaults, 'object', 'has an exposed default values map' );
+            strictEqual( typeof $.fn.naaav.defaults.activeClass, 'string', 'activeClass default value is a string' );
+        });
 
-  module(':awesome selector', {
-    // This will run before each test in this module.
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
-  });
+        test('options applied override defaults', 1, function() {
+            var testClass = 'victorious';
+            this.$nav.naaav({ activeClass:testClass });
+            var api = this.$nav.data('naaav');
+            strictEqual( api.config.activeClass, testClass, 'successfully applied activeClass option' );
+        });
 
-  test('is awesome', function() {
-    expect(1);
-    // Use deepEqual & .get() when comparing jQuery objects.
-    deepEqual(this.elems.filter(':awesome').get(), this.elems.last().get(), 'knows awesome when it sees it');
-  });
 
 }(jQuery));
