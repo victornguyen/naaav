@@ -8,6 +8,7 @@
     <!-- Load local QUnit. -->
     <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
     <script src="../libs/qunit/qunit.js"></script>
+    <script src="../libs/qunit/sinon.js"></script>
     <!-- Load local lib and tests. -->
     <script src="../src/jquery.naaav.js"></script>
     <script src="jquery.naaav_test.js"></script>
@@ -22,7 +23,7 @@
             <nav>
             <ul id="nav">
                 <li><a href="#">Home</a></li>
-                <li>
+                <li id="nav-about">
                     <a href="#">About</a>
                     <ul>
                         <li><a href="#">Another</a></li>
@@ -31,7 +32,7 @@
                         <li><a href="#">Item</a></li>
                     </ul>
                 </li>
-                <li>
+                <li id="nav-another">
                     <a href="#">Another</a>
                     <ul>
                         <li><a href="#">Generic</a></li>
