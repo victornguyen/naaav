@@ -1,4 +1,4 @@
-/*! jQuery naaav - v0.2.0 - 2013-02-23
+/*! jQuery naaav - v0.2.0 - 2013-02-24
 * https://github.com/victornguyen/naaav
 * Copyright (c) 2013 Victor Nguyen; Licensed MIT */
 (function($,window,undefined){

@@ -1,15 +1,6 @@
 /*
-    # jQuery naaav
-    A Homebrand Dropdown Menu Plugin
-
-    Just _another_ jQuery drop-down menu plugin :)
-
-    This one is a **super** basic one that's intended to just streamline the
-    setting up of a drop-down navigation. It sets up event listeners and handlers,
-    along with the in/out delays around a sub-menu's show/hide effect.
-
-    You can pass in your own show/hide functions to completely customise the
-    sub-menu display behaviour.
+    jQuery naaav
+    A simple, bare-bones jQuery drop-down menu plugin.
 
     Created by Victor Nguyen
     @victornguyen
