@@ -9,8 +9,18 @@
 (function($,window,undefined){
 
     var Naaav = function($el, options) {
-        this.$el     = $el;
-        this.config  = $.extend({}, $.fn.naaav.defaults, options || {});
+        this.$el        = $el;
+        this.config     = $.extend({}, $.fn.naaav.defaults, options || {});
+        this.animations = {
+            fade: {
+                show: 'fadeIn',
+                hide: 'fadeOut'
+            },
+            slide: {
+                show: 'slideUp',
+                hide: 'slideDown'
+            }
+        };
         this._init();
     };
 
@@ -28,26 +38,8 @@
                 this.config.easing = "swing";
             }
 
-            // set animation method
-            switch (this.config.animation) {
-                case 'fade':
-                    this.animateMethod = {
-                        show: 'fadeIn',
-                        hide: 'fadeOut'
-                    };
-                    break;
-                case 'slide':
-                    this.animateMethod = {
-                        show: 'slideDown',
-                        hide: 'slideUp'
-                    };
-                    break;
-                default:
-                    this.animateMethod = {
-                        show: 'fadeIn',
-                        hide: 'fadeOut'
-                    };
-            }
+            // set animation
+            this._setAnimation( this.config.animation );
 
             // bind event handlers
             this.$items.bind({
@@ -66,12 +58,18 @@
             });
         },
 
+        _setAnimation: function(type) {
+            this.config.animation = this.animations[type] !== undefined ? type : $.fn.naaav.defaults.animation;
+        },
+
         _animate: function($subnav, type) {
+            var cfg     = this.config,
+                method  = this.animations[cfg.animation][type];
             $subnav
                 .stop(false, true)
-                [this.animateMethod[type]](
-                    this.config[type],
-                    this.config.easing,
+                [method](
+                    cfg[type],
+                    cfg.easing,
                     function(){
                         $(this)[type]();
                     }
