@@ -85,10 +85,9 @@
             strictEqual( this.$nav.data('naaav').config.easing, 'swing', 'falls back to "swing" when easing fn not available' );
         });
 
-        test('animationMethod should default to "fade" when an unavailable animationMethod is passed', 2, function(){
+        test('animation should default to "fade" when an unavailable animation is passed', 1, function(){
             this.$nav.naaav({ animation:'thisAnimMethodDoesntExist' });
-            strictEqual( this.$nav.data('naaav').animateMethod.show, 'fadeIn', 'specifying animation:"thisAnimMethodDoesntExist" defaults show method to "fadeIn"' );
-            strictEqual( this.$nav.data('naaav').animateMethod.hide, 'fadeOut', 'specifying animation:"thisAnimMethodDoesntExist" defaults hide method to "fadeOut"' );
+            strictEqual( this.$nav.data('naaav').config.animation, 'fade', 'specifying animation:"thisAnimMethodDoesntExist" defaults animation to "fade"' );
         });
 
 
